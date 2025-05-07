@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Translator App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>English to Indian Languages Translator</h1>
+        <textarea id="inputText" placeholder="Enter English text here..."></textarea>
+
+        <select id="languageSelect">
+            <option value="#">Select Lnaguage</option>
+            <option value="kannada">Kannada</option>
+            <option value="hindi">Hindi</option>
+            <option value="tamil">Tamil</option>
+            <option value="telugu">Telugu</option>
+            <option value="malayalam">Malayalam</option>
+            <option value="sanskrit">sanskrit</option>
+            <option value="brazilian_portuguese">Portuguese (Brazil)</option>
+            <option value="german">German</option>
+        </select>
+
+        <button onclick="translateText()">Translate</button>
+
+        <h3>Translated Text:</h3>
+        <p id="outputText"></p>
+    </div>
+
+    <script>
+        async function translateText() {
+            const text = document.getElementById('inputText').value;
+            const language = document.getElementById('languageSelect').value;
+
+            const response = await fetch('/translate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text, language }),
+            });
+
+            const data = await response.json();
+            document.getElementById('outputText').innerText = data.translated_text || data.error;
+        }
+    </script>
+</body>
+</html>
